@@ -36,6 +36,15 @@
     [self _changeLeftViewPositionX:self.leftViewMinDisplayingOriginX];
     // Do any additional setup after loading the view.
 }
+-(void)makeLeftViewDisplaying:(BOOL)displaying animated:(BOOL)animate
+{
+    CGFloat targetOriginX = displaying?self.leftViewMaxDisplayingOriginX:self.leftViewMinDisplayingOriginX;
+    if (animate) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self _changeLeftViewPositionX:targetOriginX];
+        }];
+    }else{[self _changeLeftViewPositionX:targetOriginX];}
+}
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
@@ -46,7 +55,7 @@
     _tryingToDisplayLeftView = startPoint.x<=self.validDisplayEdgeLeft;
     return YES;
 }
-#pragma mark - PanGesture
+#pragma mark - Gestures
 - (void)handleLeftViewDisplaying:(UIPanGestureRecognizer*)sender
 {
     switch (sender.state) {
@@ -63,6 +72,10 @@
         break;
         default:break;
     }
+}
+-(void)hideLeftView
+{
+    [self makeLeftViewDisplaying:NO animated:YES];
 }
 #pragma mark - ToucheHandles
 
@@ -131,6 +144,8 @@
     UIView*view = [[UIView alloc] initWithFrame:_mainView.view.bounds];
     view.backgroundColor = [UIColor blackColor];
     view.hidden = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideLeftView)];
+    [view addGestureRecognizer:tap];
     return view;
 }
 - (BOOL)_shouldFinishDisplayingWhenTouchEnding:(UIPanGestureRecognizer *)sender

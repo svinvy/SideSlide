@@ -13,6 +13,8 @@
 
 - (instancetype)initWithLeftView:(UIViewController*)leftView mainView:(UIViewController*)mainView;
 
+-(void)makeLeftViewDisplaying:(BOOL)displaying animated:(BOOL)animate;
+
 @property(nonatomic,strong,readonly)UIViewController *leftView;
 @property(nonatomic,strong,readonly)UIViewController *mainView;
 @property(nonatomic,assign,readonly)CGFloat leftViewCurrentDisplayingWidth;
